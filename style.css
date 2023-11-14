@@ -1,0 +1,48 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #323232;
+    margin: 0 auto;
+    color: white;
+}
+
+h1 {
+   text-align: center; 
+}
+
+#content {
+    margin-top: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    width: 75px;
+    height: 75px;
+    border: 5px solid white; 
+    text-align: center;
+    vertical-align: middle;
+    font-size: 48px;
+    background-color: transparent;
+}
+
+table tr:first-child td {
+    border-top: 0;
+}
+
+table tr td:first-child {
+    border-left: 0;
+}
+
+table tr:last-child td {
+    border-bottom: 0;
+}
+
+table tr td:last-child {
+    border-right: 0;
+}
