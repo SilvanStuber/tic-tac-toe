@@ -46,3 +46,12 @@ table tr:last-child td {
 table tr td:last-child {
     border-right: 0;
 }
+
+@keyframes fillCircle {
+    from {
+        stroke-dashoffset: 188.4;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}

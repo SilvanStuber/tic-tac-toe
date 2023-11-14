@@ -42,6 +42,37 @@ function createAnimatedCircle() {
     return svg.outerHTML;
 }
 
+function createCross() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "70px");
+    svg.setAttribute("height", "70px");
+
+    // Erstellen der Linien für das Kreuz
+    let line1 = document.createElementNS(svgNS, "line");
+    line1.setAttribute("x1", "10");
+    line1.setAttribute("y1", "10");
+    line1.setAttribute("x2", "60");
+    line1.setAttribute("y2", "60");
+    line1.setAttribute("stroke", "#ffc000");
+    line1.setAttribute("stroke-width", "5");
+
+    let line2 = document.createElementNS(svgNS, "line");
+    line2.setAttribute("x1", "60");
+    line2.setAttribute("y1", "10");
+    line2.setAttribute("x2", "10");
+    line2.setAttribute("y2", "60");
+    line2.setAttribute("stroke", "#ffc000");
+    line2.setAttribute("stroke-width", "5");
+
+    // Hinzufügen der Linien zum SVG-Element
+    svg.appendChild(line1);
+    svg.appendChild(line2);
+
+    // Rückgabe des SVG-Elements als HTML-String
+    return svg.outerHTML;
+}
+
 function render() {
     let content = document.getElementById('content');
     let tableHTML = '<table>';
@@ -55,7 +86,7 @@ function render() {
         if (fields[i] === 'circle') {
             cellContent = createAnimatedCircle();
         } else if (fields[i] === 'cross') {
-            cellContent = 'X';
+            cellContent = createCross();
         }
 
         tableHTML += `<td>${cellContent}</td>`;
@@ -69,16 +100,3 @@ function render() {
     content.innerHTML = tableHTML;
 }
 
-// Stellen Sie sicher, dass der CSS-Code für die Animation im Dokument vorhanden ist
-const style = document.createElement('style');
-style.innerHTML = `
-    @keyframes fillCircle {
-        to {
-            stroke-dashoffset: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Initialisierung des Spiels
-init();
