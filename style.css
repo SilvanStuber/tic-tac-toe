@@ -6,7 +6,7 @@ body {
 }
 
 h1 {
-   text-align: center; 
+    text-align: center; 
 }
 
 #content {
@@ -14,7 +14,6 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 table {
@@ -22,13 +21,11 @@ table {
 }
 
 table td {
-    width: 75px;
-    height: 75px;
+    width: 80px;
+    height: 80px;
     border: 5px solid white; 
     text-align: center;
     vertical-align: middle;
-    font-size: 48px;
-    background-color: transparent;
 }
 
 table tr:first-child td {
@@ -47,11 +44,20 @@ table tr td:last-child {
     border-right: 0;
 }
 
-@keyframes fillCircle {
-    from {
-        stroke-dashoffset: 188.4;
-    }
+.cross-animation {
+    stroke-dasharray: 85;
+    stroke-dashoffset: 85;
+    animation: draw 2s forwards;
+  }
+
+  .circle-animation {
+    stroke-dasharray: 157;
+    stroke-dashoffset: 157;
+    animation: draw 2s forwards;
+  }
+
+  @keyframes draw {
     to {
-        stroke-dashoffset: 0;
+      stroke-dashoffset: 0;
     }
-}
+  }
