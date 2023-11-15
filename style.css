@@ -66,3 +66,18 @@ table tr td:last-child {
       stroke-dashoffset: 0;
     }
   }
+
+  /* Stil für <td>-Elemente, um als Bezugspunkt für die absolute Positionierung zu dienen */
+td {
+    position: relative;
+    /* Weitere Stile ... */
+}
+
+/* Stil für die SVG-Linie */
+#winning-line {
+    position: absolute;
+    background-color: red; // Farbe der Linie
+    z-index: 10; // Stellt sicher, dass die Linie über den Zellen liegt
+}
+
+
