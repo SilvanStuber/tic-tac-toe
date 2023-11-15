@@ -1,11 +1,11 @@
 let fields = [
     null,
-    'cross',
     null,
     null,
     null,
     null,
-    'circle',
+    null,
+    null,
     null,
     null,
 ];
@@ -14,7 +14,26 @@ function init() {
     render();
 }
 
-function createAnimatedCircle() {
+let currentPlayer = 'circle';
+
+function init() {
+    render();
+    attachClickHandlers();
+}
+
+function cellClicked(event) {
+    const cellIndex = event.target.dataset.index;
+
+    if (fields[cellIndex] === null) {
+        fields[cellIndex] = currentPlayer;
+        updateCell(cellIndex);
+
+        currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle';
+    }
+}
+
+
+function createCircle() {
     const svgNS = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("width", "60px");
@@ -59,6 +78,15 @@ function createCross() {
     return svg.outerHTML;
 }
 
+function updateCell(index) {
+    const cell = document.querySelector(`td[data-index='${index}']`);
+    if (fields[index] === 'circle') {
+        cell.innerHTML = createCircle();
+    } else if (fields[index] === 'cross') {
+        cell.innerHTML = createCross();
+    }
+    cell.onclick = null; // Entfernt den Click-Handler nach einem Klick
+}
 
 function render() {
     let content = document.getElementById('content');
@@ -69,14 +97,7 @@ function render() {
             tableHTML += '<tr>';
         }
 
-        let cellContent = '';
-        if (fields[i] === 'circle') {
-            cellContent = createAnimatedCircle();
-        } else if (fields[i] === 'cross') {
-            cellContent = createCross();
-        }
-
-        tableHTML += `<td>${cellContent}</td>`;
+        tableHTML += `<td data-index="${i}"></td>`;
 
         if (i % 3 === 2) {
             tableHTML += '</tr>';
@@ -85,4 +106,13 @@ function render() {
 
     tableHTML += '</table>';
     content.innerHTML = tableHTML;
-} 
+}
+
+function attachClickHandlers() {
+    const cells = document.querySelectorAll('td');
+    cells.forEach(cell => {
+        cell.onclick = cellClicked;
+    });
+}
+
+init();
