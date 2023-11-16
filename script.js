@@ -8,6 +8,11 @@ let currentPlayer = 'circle';
 
 function init() {
     render();
+    if (checkGameOver() === true) {
+        disableClickHandlers() === false;
+        currentPlayer = 'circle';
+    } 
+
     attachClickHandlers();
 }
 
@@ -197,3 +202,20 @@ function attachClickHandlers() {
 }
 
 init();
+
+function restartGame() {
+    // Setzt alle Felder zurück auf null
+    fields = fields.map(() => null);
+
+    // Setzt den aktuellen Spieler zurück
+    currentPlayer = 'circle';
+
+    // Entfernt alle Gewinnlinien, falls vorhanden
+    const winLines = document.querySelectorAll('svg');
+    winLines.forEach(line => line.remove());
+
+    // Rendert das Spiel neu und fügt Click-Handler hinzu
+    render();
+    attachClickHandlers();
+}
+
