@@ -5,15 +5,47 @@ let fields = [
 ];
 
 let currentPlayer = 'circle';
+let playerNames = { circle: "", cross: "" };
 
-function init() {
-    render();
-    if (checkGameOver() === true) {
-        disableClickHandlers() === false;
-        currentPlayer = 'circle';
+function registerPlayers() {
+    playerNames.circle = document.getElementById('player1Name').value;
+    playerNames.cross = document.getElementById('player2Name').value;
+    let whichPlayerIsToBe = playerNames.circle;
+    if (currentPlayer = 'cross') {
+        whichPlayerIsToBe = playerNames.cross
+    }
+    if (playerNames.circle && playerNames.cross) {
+        document.querySelector('.player-registration').style.display = 'none';
+        document.getElementById('players').innerHTML = `<b>Spieler 1: ${playerNames.circle}</b> <b>Spieler 2: ${playerNames.cross}</b> <br> <h2> ${whichPlayerIsToBe} ist am Zug </h2>`;
+        document.querySelector('.restart-button').style.display = 'block';
+        render();
+        attachClickHandlers();
+    } else {
+        alert("Bitte geben Sie die Namen beider Spieler ein.");
+    }
+    generateGame()
+}
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelector('.restart-button').style.display = 'none'; // Verbergen Sie die Neustart-Schaltfläche beim Laden der Seite
+});
+
+
+
+function generateGame() {
+    loadGame();
+    if (checkGameOver()) {
+        disableClickHandlers();
     }
     attachClickHandlers();
 }
+
+function startGame() {
+    loadGame();
+    render();
+    attachClickHandlers();
+    document.querySelector('.player-registration').style.display = 'none';
+}
+
 
 function cellClicked(event) {
     const cellIndex = event.target.dataset.index;
@@ -26,6 +58,8 @@ function cellClicked(event) {
             disableClickHandlers();
         }
     }
+    saveGame();
+    
 }
 
 function createCircle() {
@@ -93,15 +127,16 @@ function checkGameOver() {
         [0, 4, 8],
         [2, 4, 6]
     ];
-
     for (const combination of winningCombinations) {
         const [a, b, c] = combination;
         if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
             drawWinningLine(combination);
+            showWinner(playerNames[fields[a]]);
             return true;
         }
     }
     return false;
+
 }
 
 function disableClickHandlers() {
@@ -204,13 +239,10 @@ function setLineAttributes(line, positions) {
 function drawWinningLine(combination) {
     const content = document.getElementById('content');
     const svgNS = "http://www.w3.org/2000/svg";
-
     let svg = createSvgElement(content);
     let line = createLineElement(svgNS);
-
     let positions = calculateLinePositions(combination, content);
     setLineAttributes(line, positions);
-
     svg.appendChild(line);
     content.appendChild(svg);
 }
@@ -224,14 +256,11 @@ function render() {
         if (i % 3 === 0) {
             tableHTML += '<tr>';
         }
-
         tableHTML += `<td data-index="${i}"></td>`;
-
         if (i % 3 === 2) {
             tableHTML += '</tr>';
         }
     }
-
     tableHTML += '</table>';
     content.innerHTML = tableHTML;
 }
@@ -246,9 +275,45 @@ function attachClickHandlers() {
 function restartGame() {
     fields = fields.map(() => null);
     currentPlayer = 'circle';
+    playerNames = { circle: "", cross: "" };
+    localStorage.removeItem('ticTacToeGame');
+    fields = fields.map(() => null);
+    currentPlayer = 'circle';
     const winLines = document.querySelectorAll('svg');
     winLines.forEach(line => line.remove());
-    render();
-    attachClickHandlers();
+    document.querySelector('.player-registration').style.display = 'flex'; // Zeigen Sie die Registrierungsform wieder an
+    document.getElementById('players').innerHTML = ''; // Entfernen Sie die Spielernamen
+    document.querySelector('.restart-button').style.display = 'none'; // Verbergen Sie die Neustart-Schaltfläche
+    // Entfernen Sie saveGame() und attachClickHandlers() aus restartGame(), da das Spiel noch nicht gestartet ist
 }
+
+function showWinner(player) {
+    let content = document.getElementById('content');
+    content.innerHTML += `
+      <div class="winner-display">
+        <h2>Gewinner: ${player}</h2>
+      </div>
+    `;
+}
+
+function saveGame() {
+    const gameData = {
+        fields: fields,
+        currentPlayer: currentPlayer,
+        playerNames: playerNames
+    };
+    localStorage.setItem('ticTacToeGame', JSON.stringify(gameData));
+}
+
+function loadGame() {
+    const savedGame = localStorage.getItem('ticTacToeGame');
+    if (savedGame) {
+        const gameData = JSON.parse(savedGame);
+        fields = gameData.fields;
+        currentPlayer = gameData.currentPlayer;
+        playerNames = gameData.playerNames;
+        render();
+    }
+}
+
 
