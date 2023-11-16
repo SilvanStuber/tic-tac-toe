@@ -13,7 +13,6 @@ function init() {
 
 function cellClicked(event) {
     const cellIndex = event.target.dataset.index;
-
     if (fields[cellIndex] === null && !checkGameOver()) {
         fields[cellIndex] = currentPlayer;
         updateCell(cellIndex);
@@ -99,7 +98,6 @@ function checkGameOver() {
             return true;
         }
     }
-
     return false;
 }
 
@@ -112,55 +110,63 @@ function disableClickHandlers() {
 
 function drawWinningLine(combination) {
     const content = document.getElementById('content');
-    const firstCell = document.querySelector(`td[data-index='${combination[0]}']`);
-    const lastCell = document.querySelector(`td[data-index='${combination[2]}']`);
-
-    const firstCellRect = firstCell.getBoundingClientRect();
-    const lastCellRect = lastCell.getBoundingClientRect();
-
-    const line = document.createElement("div");
-    line.id = "winning-line";
-    
-    // Anpassen der Linie je nach Orientierung (horizontal, vertikal, diagonal)
-    if (combination[0] % 3 === 0 && combination[2] === combination[0] + 2) {
-        // Horizontal
-        line.style.width = `${lastCellRect.right - firstCellRect.left}px`;
-        line.style.height = '5px';
-        line.style.top = `${firstCellRect.top + firstCellRect.height / 2}px`;
-        line.style.left = `${firstCellRect.left}px`;
-    } else if (combination[0] < 3 && combination[2] > 5) {
-        // Vertikal
-        line.style.width = '5px';
-        line.style.height = `${lastCellRect.bottom - firstCellRect.top}px`;
-        line.style.top = `${firstCellRect.top}px`;
-        line.style.left = `${firstCellRect.left + firstCellRect.width / 2}px`;
-    } else {
-        // Diagonal
-        // Hier müssen Sie die Logik für diagonale Linien anpassen
-    }
-
-    document.body.appendChild(line); // Füge die Linie dem Body hinzu, nicht dem #content
-}
-
-
-
-function createLine() {
     const svgNS = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("class", "winning-line");
-    svg.setAttribute("width", "80");
-    svg.setAttribute("height", "80");
+    svg.setAttribute("width", content.clientWidth);
+    svg.setAttribute("height", content.clientHeight);
+    svg.style.position = "absolute";
+    svg.style.top = content.offsetTop + "px";
+    svg.style.left = content.offsetLeft + "px";
 
     let line = document.createElementNS(svgNS, "line");
-    line.setAttribute("x1", "0");
-    line.setAttribute("y1", "0");
-    line.setAttribute("x2", "80");
-    line.setAttribute("y2", "80");
     line.setAttribute("stroke", "red");
     line.setAttribute("stroke-width", "5");
 
+    const firstCell = document.querySelector(`td[data-index='${combination[0]}']`);
+    const lastCell = document.querySelector(`td[data-index='${combination[2]}']`);
+    const firstCellRect = firstCell.getBoundingClientRect();
+    const lastCellRect = lastCell.getBoundingClientRect();
+
+    // Spezielle Behandlung für vertikale Linie in der ersten Spalte
+    if (combination[0] === 0 && combination[2] === 6) {
+        line.setAttribute("x1", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y1", firstCellRect.top - content.offsetTop + firstCellRect.height / 2);
+        line.setAttribute("x2", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y2", lastCellRect.bottom - content.offsetTop - lastCellRect.height / 2);
+    } else {
+      // Diagonalen
+      if (combination.includes(0) && combination.includes(8)) {
+        // Diagonale von oben links nach unten rechts
+        line.setAttribute("x1", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y1", firstCellRect.top - content.offsetTop + firstCellRect.height / 2);
+        line.setAttribute("x2", lastCellRect.right - content.offsetLeft - lastCellRect.width / 2);
+        line.setAttribute("y2", lastCellRect.bottom - content.offsetTop - lastCellRect.height / 2);
+    } else if (combination.includes(2) && combination.includes(6)) {
+        // Diagonale von oben rechts nach unten links
+        line.setAttribute("x1", lastCellRect.right - content.offsetLeft - lastCellRect.width / 2);
+        line.setAttribute("y1", lastCellRect.top - content.offsetTop + lastCellRect.height / 2);
+        line.setAttribute("x2", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y2", firstCellRect.bottom - content.offsetTop - firstCellRect.height / 2);
+    } 
+    // Horizontal
+    else if (combination[0] % 3 === 0) {
+        line.setAttribute("x1", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y1", firstCellRect.top - content.offsetTop + firstCellRect.height / 2);
+        line.setAttribute("x2", lastCellRect.right - content.offsetLeft - lastCellRect.width / 2);
+        line.setAttribute("y2", firstCellRect.top - content.offsetTop + firstCellRect.height / 2);
+    }
+    // Vertikal
+    else {
+        line.setAttribute("x1", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y1", firstCellRect.top - content.offsetTop);
+        line.setAttribute("x2", firstCellRect.left - content.offsetLeft + firstCellRect.width / 2);
+        line.setAttribute("y2", lastCellRect.bottom - content.offsetTop);
+    }
+
+    }
+
     svg.appendChild(line);
-    return svg.outerHTML;
+    content.appendChild(svg);
 }
 
 function render() {
