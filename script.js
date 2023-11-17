@@ -7,28 +7,27 @@ let fields = [
 let currentPlayer = 'circle';
 let playerNames = { circle: "", cross: "" };
 
+function init() {
+    restartGame(); 
+}
 
 function registerPlayers() {
     playerNames.circle = document.getElementById('player1Name').value;
     playerNames.cross = document.getElementById('player2Name').value;
     let whichPlayerIsToBe = playerNames.circle;
-    if (currentPlayer = 'cross') {
-        whichPlayerIsToBe = playerNames.cross
-    }
-    if (playerNames.circle && playerNames.cross) {
-        document.querySelector('.player-registration').style.display = 'none';
-        document.getElementById('players').innerHTML = `<b>Spieler 1: ${playerNames.circle}</b> <b>Spieler 2: ${playerNames.cross}</b> <br> <h2> ${whichPlayerIsToBe} ist am Zug </h2>`;
-        document.querySelector('.restart-button').style.display = 'block';
-        render();
-        attachClickHandlers();
-    } else {
-        alert("Bitte geben Sie die Namen beider Spieler ein.");
-    }
+
+    document.querySelector('.player-registration').style.display = 'none';
+    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <br> <h2 id="nextplayer" class="color-player-circle"> ${whichPlayerIsToBe} ist am Zug </h2>`;
+    document.querySelector('.restart-button').style.display = 'block';
+    document.getElementById('nextplayer').classList.remove('d-none')
+    renderGame();
+    attachClickHandlers();
     generateGame()
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelector('.restart-button').style.display = 'none';
+    });
 }
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelector('.restart-button').style.display = 'none';
-});
 
 
 
@@ -36,15 +35,32 @@ function generateGame() {
     loadGame();
     if (checkGameOver()) {
         disableClickHandlers();
+        document.getElementById('nextplayer').classList.add('d-none')
     }
     attachClickHandlers();
 }
 
 function startGame() {
     loadGame();
-    render();
+    renderGame();
     attachClickHandlers();
     document.querySelector('.player-registration').style.display = 'none';
+}
+
+function renderGame() {
+    let content = document.getElementById('content');
+    let tableHTML = '<table>';
+    for (let i = 0; i < fields.length; i++) {
+        if (i % 3 === 0) {
+            tableHTML += '<tr>';
+        }
+        tableHTML += `<td data-index="${i}"></td>`;
+        if (i % 3 === 2) {
+            tableHTML += '</tr>';
+        }
+    }
+    tableHTML += '</table>';
+    content.innerHTML = tableHTML;
 }
 
 
@@ -76,10 +92,12 @@ function updateCell(index) {
 function updatePlayer() {
     if (currentPlayer === 'cross') {
         nextPlayer = playerNames.cross
-    } else { 
-        nextPlayer = playerNames.circle 
+        colorNextPlayer = `color-player-cross`
+    } else {
+        nextPlayer = playerNames.circle
+        colorNextPlayer = `color-player-circle`
     }
-    document.getElementById('players').innerHTML = `<b>Spieler 1: ${playerNames.circle}</b> <b>Spieler 2: ${playerNames.cross}</b> <br> <h2> ${nextPlayer} ist am Zug </h2>`;
+    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <br> <h2 id="nextplayer" class="${colorNextPlayer}"> ${nextPlayer} ist am Zug </h2>`;
 }
 
 
@@ -259,24 +277,6 @@ function drawWinningLine(combination) {
     content.appendChild(svg);
 }
 
-
-function render() {
-    let content = document.getElementById('content');
-    let tableHTML = '<table>';
-
-    for (let i = 0; i < fields.length; i++) {
-        if (i % 3 === 0) {
-            tableHTML += '<tr>';
-        }
-        tableHTML += `<td data-index="${i}"></td>`;
-        if (i % 3 === 2) {
-            tableHTML += '</tr>';
-        }
-    }
-    tableHTML += '</table>';
-    content.innerHTML = tableHTML;
-}
-
 function attachClickHandlers() {
     const cells = document.querySelectorAll('td');
     cells.forEach(cell => {
@@ -324,8 +324,6 @@ function loadGame() {
         fields = gameData.fields;
         currentPlayer = gameData.currentPlayer;
         playerNames = gameData.playerNames;
-        render();
+        renderGame();
     }
 }
-
-
