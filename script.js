@@ -7,6 +7,7 @@ let fields = [
 let currentPlayer = 'circle';
 let playerNames = { circle: "", cross: "" };
 
+
 function registerPlayers() {
     playerNames.circle = document.getElementById('player1Name').value;
     playerNames.cross = document.getElementById('player2Name').value;
@@ -26,7 +27,7 @@ function registerPlayers() {
     generateGame()
 }
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelector('.restart-button').style.display = 'none'; // Verbergen Sie die Neustart-Schaltfläche beim Laden der Seite
+    document.querySelector('.restart-button').style.display = 'none';
 });
 
 
@@ -59,53 +60,9 @@ function cellClicked(event) {
         }
     }
     saveGame();
-    
+    updatePlayer();
 }
 
-function createCircle() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", "30");
-    circle.setAttribute("cy", "30");
-    circle.setAttribute("r", "25");
-    circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", "#00B0EF");
-    circle.setAttribute("stroke-width", "5");
-    circle.setAttribute("stroke-dasharray", "157");
-    circle.setAttribute("stroke-dashoffset", "157");
-    circle.classList.add("circle-animation");
-    svg.appendChild(circle);
-    return svg.outerHTML;
-}
-
-function createCross() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let line1 = document.createElementNS(svgNS, "line");
-    line1.setAttribute("x1", "5");
-    line1.setAttribute("y1", "5");
-    line1.setAttribute("x2", "55");
-    line1.setAttribute("y2", "55");
-    line1.setAttribute("stroke", "#ffc000");
-    line1.setAttribute("stroke-width", "5");
-    line1.classList.add("cross-animation");
-    let line2 = document.createElementNS(svgNS, "line");
-    line2.setAttribute("x1", "55");
-    line2.setAttribute("y1", "5");
-    line2.setAttribute("x2", "5");
-    line2.setAttribute("y2", "55");
-    line2.setAttribute("stroke", "#ffc000");
-    line2.setAttribute("stroke-width", "5");
-    line2.classList.add("cross-animation");
-    svg.appendChild(line1);
-    svg.appendChild(line2);
-    return svg.outerHTML;
-}
 
 function updateCell(index) {
     const cell = document.querySelector(`td[data-index='${index}']`);
@@ -115,6 +72,16 @@ function updateCell(index) {
         cell.innerHTML = createCross();
     }
 }
+
+function updatePlayer() {
+    if (currentPlayer === 'cross') {
+        nextPlayer = playerNames.cross
+    } else { 
+        nextPlayer = playerNames.circle 
+    }
+    document.getElementById('players').innerHTML = `<b>Spieler 1: ${playerNames.circle}</b> <b>Spieler 2: ${playerNames.cross}</b> <br> <h2> ${nextPlayer} ist am Zug </h2>`;
+}
+
 
 function checkGameOver() {
     const winningCombinations = [
@@ -162,6 +129,51 @@ function createLineElement(svgNS) {
     line.setAttribute("stroke", "red");
     line.setAttribute("stroke-width", "5");
     return line;
+}
+
+function createCircle() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "60px");
+    svg.setAttribute("height", "60px");
+    let circle = document.createElementNS(svgNS, "circle");
+    circle.setAttribute("cx", "30");
+    circle.setAttribute("cy", "30");
+    circle.setAttribute("r", "25");
+    circle.setAttribute("fill", "none");
+    circle.setAttribute("stroke", "#00B0EF");
+    circle.setAttribute("stroke-width", "5");
+    circle.setAttribute("stroke-dasharray", "157");
+    circle.setAttribute("stroke-dashoffset", "157");
+    circle.classList.add("circle-animation");
+    svg.appendChild(circle);
+    return svg.outerHTML;
+}
+
+function createCross() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "60px");
+    svg.setAttribute("height", "60px");
+    let line1 = document.createElementNS(svgNS, "line");
+    line1.setAttribute("x1", "5");
+    line1.setAttribute("y1", "5");
+    line1.setAttribute("x2", "55");
+    line1.setAttribute("y2", "55");
+    line1.setAttribute("stroke", "#ffc000");
+    line1.setAttribute("stroke-width", "5");
+    line1.classList.add("cross-animation");
+    let line2 = document.createElementNS(svgNS, "line");
+    line2.setAttribute("x1", "55");
+    line2.setAttribute("y1", "5");
+    line2.setAttribute("x2", "5");
+    line2.setAttribute("y2", "55");
+    line2.setAttribute("stroke", "#ffc000");
+    line2.setAttribute("stroke-width", "5");
+    line2.classList.add("cross-animation");
+    svg.appendChild(line1);
+    svg.appendChild(line2);
+    return svg.outerHTML;
 }
 
 function calculateLinePositions(combination, content) {
@@ -281,10 +293,10 @@ function restartGame() {
     currentPlayer = 'circle';
     const winLines = document.querySelectorAll('svg');
     winLines.forEach(line => line.remove());
-    document.querySelector('.player-registration').style.display = 'flex'; // Zeigen Sie die Registrierungsform wieder an
-    document.getElementById('players').innerHTML = ''; // Entfernen Sie die Spielernamen
-    document.querySelector('.restart-button').style.display = 'none'; // Verbergen Sie die Neustart-Schaltfläche
-    // Entfernen Sie saveGame() und attachClickHandlers() aus restartGame(), da das Spiel noch nicht gestartet ist
+    document.querySelector('.player-registration').style.display = 'flex';
+    document.getElementById('players').innerHTML = '';
+    document.querySelector('.restart-button').style.display = 'none';
+    document.getElementById('content').innerHTML = ``;
 }
 
 function showWinner(player) {
