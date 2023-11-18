@@ -61,7 +61,6 @@ function restartGame() {
     const winLines = document.querySelectorAll('svg');
     winLines.forEach(line => line.remove());
     document.getElementById('players').innerHTML = '';
-
     document.getElementById('content').innerHTML = ``;
     document.getElementById('updateplayers').innerHTML = ``;
 }
