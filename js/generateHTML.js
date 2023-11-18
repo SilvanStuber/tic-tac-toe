@@ -59,24 +59,6 @@ function createCross() {
   return svg.outerHTML;
 }
 
-function loadImpressum() {
-  let contentHomePage = document.getElementById('contenthomepage');
-  contentHomePage.innerHTML = `
-     <div class="impressum-container">
-       <p class="impressum-text">
-        Silvan Stuber<br />
-        Bernstrasse 46<br />
-        3267 Seedorf
-       </p>
-       <h2 class="second-headline-impressum">Contact</h2>
-       <a class="link-impressum" href="mailto:silvan.stuber1@gmail.com">E-Mail: silvan.stuber1@gmail.com</a>
-       <h2 class="second-headline-impressum">Die Icons stammen von</h2>
-       <a class="link-impressum" href="https://pixabay.com/" rel="nofollow" target="_blank">pixabay</a>
-       <p onclick="init()" class="link-impressum">Startseite</p>
-     </div>
-    `;
-}
-
 function renderhomePage() {
   let contentHomePage = document.getElementById('contenthomepage');
   contentHomePage.innerHTML = `
@@ -93,6 +75,24 @@ function renderhomePage() {
            <p onclick="loadImpressum()" class="link-footer">Impressum</p>
          </footer>
     </div>
+    `;
+}
+
+function loadImpressum() {
+  let contentHomePage = document.getElementById('contenthomepage');
+  contentHomePage.innerHTML = `
+     <div class="impressum-container">
+       <p class="impressum-text">
+        Silvan Stuber<br />
+        Bernstrasse 46<br />
+        3267 Seedorf
+       </p>
+       <h2 class="second-headline-impressum">Contact</h2>
+       <a class="link-impressum" href="mailto:silvan.stuber1@gmail.com">E-Mail: silvan.stuber1@gmail.com</a>
+       <h2 class="second-headline-impressum">Die Icons stammen von</h2>
+       <a class="link-impressum" href="https://pixabay.com/" rel="nofollow" target="_blank">pixabay</a>
+       <button onclick="init()">Startseite</button>
+     </div>
     `;
 }
 

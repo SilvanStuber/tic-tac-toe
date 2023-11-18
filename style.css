@@ -53,7 +53,7 @@ footer {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .impressum-text {
@@ -61,7 +61,7 @@ footer {
 }
 
 .second-headline-impressum {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .link-impressum {
@@ -74,6 +74,21 @@ footer {
 .link-impressum:hover {
   transform: scale(1.1);
   color: #594caf;
+}
+
+.impressum-container button {
+  background-color: #594caf;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin-top: 48px;
+}
+
+.impressum-container button:hover {
+  background-color: #7366ce;
 }
 
 table {
