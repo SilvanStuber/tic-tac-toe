@@ -190,9 +190,9 @@ function generateHorizontalPosition(firstCellRect, lastCellRect) {
 function generateVerticalPosition(firstCellRect, lastCellRect) {
     return position = {
         x1: firstCellRect.left - content.offsetLeft + firstCellRect.width / 2,
-        y1: firstCellRect.top - content.offsetTop,
+        y1: firstCellRect.top - content.offsetTop + firstCellRect.height / 2,
         x2: firstCellRect.left - content.offsetLeft + firstCellRect.width / 2,
-        y2: lastCellRect.bottom - content.offsetTop
+        y2: lastCellRect.bottom - content.offsetTop - lastCellRect.height / 2
     };
 }
 
