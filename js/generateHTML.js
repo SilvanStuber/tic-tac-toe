@@ -85,7 +85,7 @@ function renderhomePage() {
       onsubmit="registerPlayers(); return false;">
       <input type="text" id="player1Name" placeholder="Name des Spielers 1" required/>
       <input type="text" id="player2Name" placeholder="Name des Spielers 2" required/>
-      <button>Start Spiel</button>
+      <button>Starte Spiel</button>
     </form>
     <div class="footer-container">
         <footer>
