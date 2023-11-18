@@ -9,20 +9,22 @@ let playerNames = { circle: "", cross: "" };
 
 function init() {
     restartGame();
+    renderhomePage();
 }
 
 function registerPlayers() {
     playerNames.circle = document.getElementById('player1Name').value;
     playerNames.cross = document.getElementById('player2Name').value;
     let whichPlayerIsToBe = playerNames.circle;
-    document.querySelector('.player-registration').style.display = 'none';
-    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <h2 class="color-player-circle"> ${whichPlayerIsToBe} ist am Zug </h2>`;
+    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b>`;
+    document.getElementById('updateplayers').innerHTML = `<h2 class="color-player-circle"> ${whichPlayerIsToBe} ist am Zug </h2>`;
     renderGame();
     attachClickHandlers();
     generateGame();
     renderRestartButton();
     document.addEventListener('DOMContentLoaded', (event) => {
     });
+    document.getElementById('contenthomepage').innerHTML = ``;
 }
 
 function generateGame() {
@@ -46,18 +48,7 @@ function renderGame() {
         }
     }
     tableHTML += '</table>';
-    content.innerHTML = tableHTML;   
-}
-
-function renderRestartButton() {
-    let restartContainer = document.getElementById('restartcontainer');
-    restartContainer.innerHTML = `
-    <form  onsubmit="restartGame()" class="button-container">
-    <button class="restart-button">
-      Spiel neu starten
-    </button>
-    </form>
-    `;
+    content.innerHTML = tableHTML;
 }
 
 function restartGame() {
@@ -69,20 +60,10 @@ function restartGame() {
     currentPlayer = 'circle';
     const winLines = document.querySelectorAll('svg');
     winLines.forEach(line => line.remove());
-    document.querySelector('.player-registration').style.display = 'flex';
     document.getElementById('players').innerHTML = '';
 
     document.getElementById('content').innerHTML = ``;
     document.getElementById('updateplayers').innerHTML = ``;
-}
-
-function showWinner(player) {
-    let contentWinner = document.getElementById('updateplayers');
-    contentWinner.innerHTML = `
-      <div class="winner-display">
-        <h2>Gewinner: ${player}</h2>
-      </div>
-    `;
 }
 
 function cellClicked(event) {
@@ -258,67 +239,4 @@ function loadGame() {
         playerNames = gameData.playerNames;
         renderGame();
     }
-}
-
-function createSvgElement(content) {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", content.clientWidth);
-    svg.setAttribute("height", content.clientHeight);
-    svg.style.position = "absolute";
-    svg.style.top = content.offsetTop + "px";
-    svg.style.left = content.offsetLeft + "px";
-    return svg;
-}
-
-function createLineElement(svgNS) {
-    let line = document.createElementNS(svgNS, "line");
-    line.setAttribute("stroke", "red");
-    line.setAttribute("stroke-width", "5");
-    return line;
-}
-
-function createCircle() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", "30");
-    circle.setAttribute("cy", "30");
-    circle.setAttribute("r", "25");
-    circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", "#00B0EF");
-    circle.setAttribute("stroke-width", "5");
-    circle.setAttribute("stroke-dasharray", "157");
-    circle.setAttribute("stroke-dashoffset", "157");
-    circle.classList.add("circle-animation");
-    svg.appendChild(circle);
-    return svg.outerHTML;
-}
-
-function createCross() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let line1 = document.createElementNS(svgNS, "line");
-    line1.setAttribute("x1", "5");
-    line1.setAttribute("y1", "5");
-    line1.setAttribute("x2", "55");
-    line1.setAttribute("y2", "55");
-    line1.setAttribute("stroke", "#ffc000");
-    line1.setAttribute("stroke-width", "5");
-    line1.classList.add("cross-animation");
-    let line2 = document.createElementNS(svgNS, "line");
-    line2.setAttribute("x1", "55");
-    line2.setAttribute("y1", "5");
-    line2.setAttribute("x2", "5");
-    line2.setAttribute("y2", "55");
-    line2.setAttribute("stroke", "#ffc000");
-    line2.setAttribute("stroke-width", "5");
-    line2.classList.add("cross-animation");
-    svg.appendChild(line1);
-    svg.appendChild(line2);
-    return svg.outerHTML;
 }

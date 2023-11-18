@@ -1,9 +1,8 @@
 body {
   font-family: "Open Sans", sans-serif;
   background-color: #323232;
-  margin: 0 auto;
+  margin: 0;
   color: white;
-  max-height: 50vh;
 }
 
 h1 {
@@ -16,6 +15,65 @@ h1 {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.container-home-page {
+  margin-bottom: 0;
+}
+
+.footer-container {
+  position: absolute;
+  bottom: 0px;
+  left: 12px;
+  right: 12px;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text-footer {
+  font-size: 18px;
+}
+
+.link-footer {
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 125ms ease-in-out;
+}
+
+.link-footer:hover {
+  transform: scale(1.1);
+  color: #594caf;
+}
+
+.impressum-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.impressum-text {
+ font-size: 18px;
+}
+
+.second-headline-impressum {
+  font-size: 24px;
+}
+
+.link-impressum {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 125ms ease-in-out;
+}
+
+.link-impressum:hover {
+  transform: scale(1.1);
+  color: #594caf;
 }
 
 table {
@@ -101,48 +159,47 @@ td {
 }
 
 .player-registration {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 100px;
-  }
-  
-  .player-registration input {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-  }
-  
-  .player-registration button {
-    background-color: #594caf;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px 20px;
-    margin-top: 48px;
-  }
-  
-  .player-registration button:hover {
-    background-color: #7366ce;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
 
-  .player-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-  }
+.player-registration input {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
 
-  .color-player-cross {
-    color: #FFC001;
-    padding-bottom: 8px;
-  }
+.player-registration button {
+  background-color: #594caf;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin-top: 48px;
+}
 
-  .color-player-circle {
-    color: #00B0EF;
-    padding-bottom: 8px;
-  }
-  
+.player-registration button:hover {
+  background-color: #7366ce;
+}
+
+.player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.color-player-cross {
+  color: #ffc001;
+  padding-bottom: 8px;
+}
+
+.color-player-circle {
+  color: #00b0ef;
+  padding-bottom: 8px;
+}
