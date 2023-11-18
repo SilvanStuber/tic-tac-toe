@@ -8,18 +8,28 @@
   </head>
   <body onload="init()">
     <h1>Tic Tac Toe</h1>
-    <form class="player-registration" onsubmit="registerPlayers(); return false;">
-      <input type="text" id="player1Name" placeholder="Name des Spielers 1" required>
-      <input type="text" id="player2Name" placeholder="Name des Spielers 2" required>
+    <form
+      class="player-registration"
+      onsubmit="registerPlayers(); return false;"
+    >
+      <input
+        type="text"
+        id="player1Name"
+        placeholder="Name des Spielers 1"
+        required
+      />
+      <input
+        type="text"
+        id="player2Name"
+        placeholder="Name des Spielers 2"
+        required
+      />
       <button>Start Spiel</button>
     </form>
-    <div id="players" class="player-container">
-    </div>
+    <div id="players" class="player-container"></div>
+    <div id="updateplayers" class="player-container"></div>
     <div id="content"></div>
-    <div class="button-container">
-      <button onclick="restartGame()" class="restart-button">Spiel neu starten</button>
-    </div>
+    <div id="restartcontainer"></div>
     <script src="script.js"></script>
   </body>
 </html>
-

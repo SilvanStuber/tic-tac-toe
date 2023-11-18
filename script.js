@@ -8,43 +8,29 @@ let currentPlayer = 'circle';
 let playerNames = { circle: "", cross: "" };
 
 function init() {
-    restartGame(); 
+    restartGame();
 }
 
 function registerPlayers() {
     playerNames.circle = document.getElementById('player1Name').value;
     playerNames.cross = document.getElementById('player2Name').value;
     let whichPlayerIsToBe = playerNames.circle;
-
     document.querySelector('.player-registration').style.display = 'none';
-    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <br> <h2 id="nextplayer" class="color-player-circle"> ${whichPlayerIsToBe} ist am Zug </h2>`;
-    document.querySelector('.restart-button').style.display = 'block';
-    document.getElementById('nextplayer').classList.remove('d-none')
+    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <h2 class="color-player-circle"> ${whichPlayerIsToBe} ist am Zug </h2>`;
     renderGame();
     attachClickHandlers();
-    generateGame()
-
+    generateGame();
+    renderRestartButton();
     document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelector('.restart-button').style.display = 'none';
     });
 }
-
-
 
 function generateGame() {
     loadGame();
     if (checkGameOver()) {
         disableClickHandlers();
-        document.getElementById('nextplayer').classList.add('d-none')
     }
     attachClickHandlers();
-}
-
-function startGame() {
-    loadGame();
-    renderGame();
-    attachClickHandlers();
-    document.querySelector('.player-registration').style.display = 'none';
 }
 
 function renderGame() {
@@ -60,9 +46,44 @@ function renderGame() {
         }
     }
     tableHTML += '</table>';
-    content.innerHTML = tableHTML;
+    content.innerHTML = tableHTML;   
 }
 
+function renderRestartButton() {
+    let restartContainer = document.getElementById('restartcontainer');
+    restartContainer.innerHTML = `
+    <form  onsubmit="restartGame()" class="button-container">
+    <button class="restart-button">
+      Spiel neu starten
+    </button>
+    </form>
+    `;
+}
+
+function restartGame() {
+    fields = fields.map(() => null);
+    currentPlayer = 'circle';
+    playerNames = { circle: "", cross: "" };
+    localStorage.removeItem('ticTacToeGame');
+    fields = fields.map(() => null);
+    currentPlayer = 'circle';
+    const winLines = document.querySelectorAll('svg');
+    winLines.forEach(line => line.remove());
+    document.querySelector('.player-registration').style.display = 'flex';
+    document.getElementById('players').innerHTML = '';
+
+    document.getElementById('content').innerHTML = ``;
+    document.getElementById('updateplayers').innerHTML = ``;
+}
+
+function showWinner(player) {
+    let contentWinner = document.getElementById('updateplayers');
+    contentWinner.innerHTML = `
+      <div class="winner-display">
+        <h2>Gewinner: ${player}</h2>
+      </div>
+    `;
+}
 
 function cellClicked(event) {
     const cellIndex = event.target.dataset.index;
@@ -71,14 +92,13 @@ function cellClicked(event) {
         updateCell(cellIndex);
         if (!checkGameOver()) {
             currentPlayer = (currentPlayer === 'circle') ? 'cross' : 'circle';
+            updatePlayer();
         } else {
             disableClickHandlers();
         }
     }
     saveGame();
-    updatePlayer();
 }
-
 
 function updateCell(index) {
     const cell = document.querySelector(`td[data-index='${index}']`);
@@ -97,9 +117,9 @@ function updatePlayer() {
         nextPlayer = playerNames.circle
         colorNextPlayer = `color-player-circle`
     }
-    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b> <br> <h2 id="nextplayer" class="${colorNextPlayer}"> ${nextPlayer} ist am Zug </h2>`;
+    document.getElementById('players').innerHTML = `<b class="color-player-circle">Spieler 1: ${playerNames.circle}</b> <b class="color-player-cross">Spieler 2: ${playerNames.cross}</b>`;
+    document.getElementById('updateplayers').innerHTML = `<h2 class="${colorNextPlayer}"> ${nextPlayer} ist am Zug </h2>`;
 }
-
 
 function checkGameOver() {
     const winningCombinations = [
@@ -121,7 +141,6 @@ function checkGameOver() {
         }
     }
     return false;
-
 }
 
 function disableClickHandlers() {
@@ -131,70 +150,7 @@ function disableClickHandlers() {
     });
 }
 
-function createSvgElement(content) {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", content.clientWidth);
-    svg.setAttribute("height", content.clientHeight);
-    svg.style.position = "absolute";
-    svg.style.top = content.offsetTop + "px";
-    svg.style.left = content.offsetLeft + "px";
-    return svg;
-}
-
-function createLineElement(svgNS) {
-    let line = document.createElementNS(svgNS, "line");
-    line.setAttribute("stroke", "red");
-    line.setAttribute("stroke-width", "5");
-    return line;
-}
-
-function createCircle() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", "30");
-    circle.setAttribute("cy", "30");
-    circle.setAttribute("r", "25");
-    circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", "#00B0EF");
-    circle.setAttribute("stroke-width", "5");
-    circle.setAttribute("stroke-dasharray", "157");
-    circle.setAttribute("stroke-dashoffset", "157");
-    circle.classList.add("circle-animation");
-    svg.appendChild(circle);
-    return svg.outerHTML;
-}
-
-function createCross() {
-    const svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "60px");
-    svg.setAttribute("height", "60px");
-    let line1 = document.createElementNS(svgNS, "line");
-    line1.setAttribute("x1", "5");
-    line1.setAttribute("y1", "5");
-    line1.setAttribute("x2", "55");
-    line1.setAttribute("y2", "55");
-    line1.setAttribute("stroke", "#ffc000");
-    line1.setAttribute("stroke-width", "5");
-    line1.classList.add("cross-animation");
-    let line2 = document.createElementNS(svgNS, "line");
-    line2.setAttribute("x1", "55");
-    line2.setAttribute("y1", "5");
-    line2.setAttribute("x2", "5");
-    line2.setAttribute("y2", "55");
-    line2.setAttribute("stroke", "#ffc000");
-    line2.setAttribute("stroke-width", "5");
-    line2.classList.add("cross-animation");
-    svg.appendChild(line1);
-    svg.appendChild(line2);
-    return svg.outerHTML;
-}
-
-function calculateLinePositions(combination, content) {
+function calculateLinePositions(combination) {
     const firstCell = document.querySelector(`td[data-index='${combination[0]}']`);
     const lastCell = document.querySelector(`td[data-index='${combination[2]}']`);
     const firstCellRect = firstCell.getBoundingClientRect();
@@ -284,30 +240,6 @@ function attachClickHandlers() {
     });
 }
 
-function restartGame() {
-    fields = fields.map(() => null);
-    currentPlayer = 'circle';
-    playerNames = { circle: "", cross: "" };
-    localStorage.removeItem('ticTacToeGame');
-    fields = fields.map(() => null);
-    currentPlayer = 'circle';
-    const winLines = document.querySelectorAll('svg');
-    winLines.forEach(line => line.remove());
-    document.querySelector('.player-registration').style.display = 'flex';
-    document.getElementById('players').innerHTML = '';
-    document.querySelector('.restart-button').style.display = 'none';
-    document.getElementById('content').innerHTML = ``;
-}
-
-function showWinner(player) {
-    let content = document.getElementById('content');
-    content.innerHTML += `
-      <div class="winner-display">
-        <h2>Gewinner: ${player}</h2>
-      </div>
-    `;
-}
-
 function saveGame() {
     const gameData = {
         fields: fields,
@@ -326,4 +258,67 @@ function loadGame() {
         playerNames = gameData.playerNames;
         renderGame();
     }
+}
+
+function createSvgElement(content) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", content.clientWidth);
+    svg.setAttribute("height", content.clientHeight);
+    svg.style.position = "absolute";
+    svg.style.top = content.offsetTop + "px";
+    svg.style.left = content.offsetLeft + "px";
+    return svg;
+}
+
+function createLineElement(svgNS) {
+    let line = document.createElementNS(svgNS, "line");
+    line.setAttribute("stroke", "red");
+    line.setAttribute("stroke-width", "5");
+    return line;
+}
+
+function createCircle() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "60px");
+    svg.setAttribute("height", "60px");
+    let circle = document.createElementNS(svgNS, "circle");
+    circle.setAttribute("cx", "30");
+    circle.setAttribute("cy", "30");
+    circle.setAttribute("r", "25");
+    circle.setAttribute("fill", "none");
+    circle.setAttribute("stroke", "#00B0EF");
+    circle.setAttribute("stroke-width", "5");
+    circle.setAttribute("stroke-dasharray", "157");
+    circle.setAttribute("stroke-dashoffset", "157");
+    circle.classList.add("circle-animation");
+    svg.appendChild(circle);
+    return svg.outerHTML;
+}
+
+function createCross() {
+    const svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "60px");
+    svg.setAttribute("height", "60px");
+    let line1 = document.createElementNS(svgNS, "line");
+    line1.setAttribute("x1", "5");
+    line1.setAttribute("y1", "5");
+    line1.setAttribute("x2", "55");
+    line1.setAttribute("y2", "55");
+    line1.setAttribute("stroke", "#ffc000");
+    line1.setAttribute("stroke-width", "5");
+    line1.classList.add("cross-animation");
+    let line2 = document.createElementNS(svgNS, "line");
+    line2.setAttribute("x1", "55");
+    line2.setAttribute("y1", "5");
+    line2.setAttribute("x2", "5");
+    line2.setAttribute("y2", "55");
+    line2.setAttribute("stroke", "#ffc000");
+    line2.setAttribute("stroke-width", "5");
+    line2.classList.add("cross-animation");
+    svg.appendChild(line1);
+    svg.appendChild(line2);
+    return svg.outerHTML;
 }
