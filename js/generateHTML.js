@@ -4,8 +4,7 @@ function createSvgElement(content) {
     svg.setAttribute("width", content.clientWidth);
     svg.setAttribute("height", content.clientHeight);
     svg.style.position = "absolute";
-    svg.style.top = content.offsetTop + "px";
-    svg.style.left = content.offsetLeft + "px";
+
     return svg;
 }
 
